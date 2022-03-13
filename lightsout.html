@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>LightsOut</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style type="text/css">
+	html  {
+		background-color: black;
+		
+	}
+
+	.board-container {
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.board {
+		width: 400px;
+		height: 400px;
+		grid-template-columns: repeat(5, 1fr);
+		grid-template-rows: repeat(5, 80px);
+		grid-gap: 3px;
+		display: grid;
+	   
+	}
+
+
+	h1 {
+		color: white;
+	}
+
+	.blue {
+		background-color: #3299CC;
+	}
+
+	.orange {
+		background-color: #CC6666
+	}
+
+	.purple {
+		background-color: #AB47BC
+	}
+
+	.option {	
+		width: 90px;
+		height: 90px;
+		flex-direction: row;
+		margin-left: 10px;
+		margin-right: 10px;
+		background-size: contain;
+	}
+
+	.choosen {	
+		border: 3px solid red;
+		width: 90px;
+		height: 90px;
+		flex-direction: row;
+		margin-left: 10px;
+		margin-right: 10px;
+		background-size: contain;
+	}
+
+	.options {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: row;
+	}
+
+	[id="50"] {
+		background-image: url('data:image/png;base64,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');	
+	}
+	[id="51"] {
+		background-image: url('data:image/png;base64,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');
+	}
+	[id="52"] {
+		background-image: url('data:image/png;base64,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');
+
+	}
+	#instruction {
+		margin-top: 20px;
+		font-size: 20px;
+	}
+	
+</style>
+</head>
+<body>
+<div class="board-container">
+	<h1>LightsOut</h1>
+	<div class="board">
+		<div id="0" class="square" onclick="colorLayout(0)"></div>
+		<div id="1" class="square" onclick="colorLayout(1)"></div>
+		<div id="2" class="square" onclick="colorLayout(2)"></div>
+		<div id="3" class="square" onclick="colorLayout(3)"></div>
+								             	
+		<div id="4" class="square" onclick="colorLayout(4)"></div>		
+		<div id="5" class="square" onclick="colorLayout(5)"></div>
+		<div id="6" class="square" onclick="colorLayout(6)"></div>
+		<div id="7" class="square" onclick="colorLayout(7)"></div>
+								               	
+		<div id="8" class="square" onclick="colorLayout(8)"></div>
+		<div id="9" class="square" onclick="colorLayout(9)"></div>		
+		<div id="10" class="square" onclick="colorLayout(10)"></div>
+		<div id="11" class="square" onclick="colorLayout(11)"></div>
+								                	
+		<div id="12" class="square" onclick="colorLayout(12)"></div>
+		<div id="13" class="square" onclick="colorLayout(13)"></div>
+		<div id="14" class="square" onclick="colorLayout(14)"></div>		
+		<div id="15" class="square" onclick="colorLayout(15)"></div>
+								               	
+		<div id="16" class="square" onclick="colorLayout(16)"></div>
+		<div id="17" class="square" onclick="colorLayout(17)"></div>
+		<div id="18" class="square" onclick="colorLayout(18)"></div>
+		<div id="19" class="square" onclick="colorLayout(19)"></div>	
+								               	
+		<div id="20" class="square" onclick="colorLayout(20)"></div>
+		<div id="21" class="square" onclick="colorLayout(21)"></div>
+		<div id="22" class="square" onclick="colorLayout(22)"></div>
+		<div id="23" class="square" onclick="colorLayout(23)"></div>
+		<div id="24" class="square" onclick="colorLayout(24)"></div>			
+	</div>  
+	
+	
+	<h1 id="instruction">Wybierz obszar zmiany stanu kolorów: </h1>
+	<div class="options">
+		<div id="50" class="choosen" onclick="chooseLayout(50)"></div>
+		<div id="51" class="option" onclick="chooseLayout(51)"></div>
+		<div id="52" class="option" onclick="chooseLayout(52)"></div>
+	</div>
+	
+</div>
+
+	
+	
+<script>
+
+	// uzupełnianie planszy kolorami
+	for (var i=0;i<=24;i++)
+	{
+		col = Math.floor(Math.random()*3+0);
+		if (col == 0) document.getElementById(i).className = "square blue";
+		else if (col == 1) document.getElementById(i).className = "square orange";
+		else document.getElementById(i).className = "square purple";
+	}
+
+	function changeColor(id) {
+	  if (document.getElementById(id).className.match("blue")) document.getElementById(id).className = "orange";
+	  else if (document.getElementById(id).className.match("orange")) document.getElementById(id).className = "purple";
+	  else document.getElementById(id).className = "blue";
+	}
+	
+	function chooseLayout(id) {
+		if (id==50) {
+			document.getElementById(id).className = "choosen";
+			document.getElementById(51).className = "option";
+			document.getElementById(52).className = "option";
+			}
+			else if (id==51) {			
+			document.getElementById(50).className = "option";
+			document.getElementById(id).className = "choosen";
+			document.getElementById(52).className = "option";
+			}
+			else {				
+				document.getElementById(50).className = "option";
+				document.getElementById(51).className = "option";
+				document.getElementById(id).className = "choosen";
+			}
+	}
+	
+	function option1(id){
+		changeColor(id);
+		if (id >= 5) changeColor(id-5);
+		if (id%5 != 0) {
+			if (id >= 1) changeColor(id-1);
+			if (id <= 20) changeColor(id+4);
+		}
+		if (id%5 != 4) {
+			if (id <= 23) changeColor(id+1);
+			if (id <= 18) changeColor(id+6);
+		}
+	}
+	
+	function option2(id){
+		changeColor(id);
+		if (id >= 5) changeColor(id-5);
+		if (id%5 != 4 && id >= 4) changeColor(id-4);
+		if (id%5 != 0 && id >= 1) changeColor(id-1);
+		if (id <= 19) changeColor(id+5);
+		
+	}
+	
+	function option3(id){
+		changeColor(id);
+		if (id%5 != 0 && id >= 1) changeColor(id-1);
+		if (id%5 != 4 && id <= 23) changeColor(id+1);
+		if (id >= 5) changeColor(id-5);
+		if (id%5 != 0 && id <= 20) changeColor(id+4);
+
+	}
+	
+	function isFinished(){
+		for (var i=1;i<=24;i++){
+			
+			if (!document.getElementById(i).className.match(document.getElementById(i-1).className)) return;
+			
+		} alert("wygrana");
+	}
+	
+	function changeColorLayout(id){
+		// sprawdzenie który układ jest zaznaczony
+		var whichOption;
+		if (document.getElementById(50).className.match("choosen")) whichOption = 50;
+		else if (document.getElementById(51).className.match("choosen")) whichOption = 51;
+		else whichOption = 52;
+		
+		// w zależności od tego który układ jest wybrany wywołuje się odpowiednia funkcja zmieniająca układ kolorów
+		switch(whichOption){
+			case 50: option1(id);
+					 break;
+			case 51: option2(id);
+					 break;
+			case 52: option3(id);
+					 break;		
+				
+		}
+		
+	}
+	
+	function colorLayout(id){
+		changeColorLayout(id);
+		isFinished();
+	}
+	
+
+</script>
+
+
+</body>
+
+</html>
